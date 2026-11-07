@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#223f36"><meta name="description" content="买下一座被遗忘的游乐园，在真正的3D园区中翻修60种设施，管理门票、特快通道与游客口碑。"><title>重返游乐园 · 3D经营模拟器</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='18' width='64' height='64' fill='%232b6251'/%3E%3Ccircle cx='32' cy='26' r='19' fill='none' stroke='%23f4ca75' stroke-width='4'/%3E%3Cpath d='M18 58L32 26l14 32M11 26h42M32 7v38M18 12l28 28M46 12L18 40' fill='none' stroke='%23f4ca75' stroke-width='3'/%3E%3C/svg%3E"><link rel="stylesheet" href="style.css?v=6"></head>
+<body>
+<canvas id="world" aria-label="真正的3D游乐园，单击建筑管理，单击空白锁定鼠标"></canvas>
+<div id="loading"><div class="loading-wheel">◉</div><strong>正在唤醒这座游乐园</strong><span>搭建3D场景与60处固定设施…</span></div>
+<div id="crosshair" aria-hidden="true"><i></i><b></b></div><div id="aim-label"></div>
+<header class="topbar ui">
+ <a class="brand" href="#" aria-label="返回园区全景"><span class="brand-icon"><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="24" cy="19" r="14"/><path d="M14 43L24 19l10 24M10 19h28M24 5v28M14 9l20 20M34 9L14 29M12 43h24"/></g></svg></span><span><strong>重返游乐园</strong><small>PARK REVIVAL · 3D</small></span></a>
+ <div class="top-stat"><span>园区资金</span><strong id="money">¥10,000</strong></div><div class="top-stat"><span>在园游客</span><strong id="visitor-count">0 <small>人</small></strong></div><div class="top-stat reputation"><span>项目好评率</span><strong id="rating">—</strong></div>
+ <div class="clock"><span id="day">第 1 天</span><strong id="clock">09:00</strong></div>
+ <div class="speed-controls" aria-label="时间速度"><button id="pause" title="暂停">Ⅱ</button><button data-speed="0.5">0.5×</button><button data-speed="1" class="active">1×</button><button data-speed="2">2×</button></div>
+ <button id="report" class="icon-button" title="经营日报">日报</button><button id="save" class="icon-button" title="保存游戏">保存</button><button id="help" class="icon-button" title="操作说明">?</button>
+</header>
+<aside class="sidebar ui">
+ <section class="management"><div class="section-label"><span>经营控制台</span><span id="park-status" class="badge">尚未开园</span></div>
+ <div class="price-heading"><label for="ticket">入园门票</label><strong>¥<input id="ticket-number" type="number" min="0" max="300" step="5" aria-label="门票价格"></strong></div><input id="ticket" type="range" min="0" max="300" step="5"><div class="range-labels"><span>亲民</span><span>高价</span></div>
+ <div class="price-heading"><label for="fast">特快通行证</label><strong>¥<input id="fast-number" type="number" min="0" max="250" step="5" aria-label="特快通行证价格"></strong></div><input id="fast" type="range" min="0" max="250" step="5"><p class="micro">特快只提供排队优先权，特殊项目另收费。</p>
+ <button id="toggle-park" class="primary full">开园迎客 <span>↗</span></button><div id="forecast" class="forecast"></div>
+ <button id="progress" class="progress-card" title="查看长期复兴目标"><span>乐园复兴计划 <b id="progress-number">0%</b></span><span class="progress-track"><i id="progress-fill"></i></span><small id="progress-caption">60处设施，慢慢点亮</small></button>
+ </section>
+ <div class="sidebar-tabs"><button data-side="facilities" class="active">设施图鉴 <span>60</span></button><button data-side="reviews">游客口碑</button></div>
+ <section id="facility-browser" class="browser-section"><div class="search-wrap"><span>⌕</span><input id="search" placeholder="搜索设施，例如：真人CS" aria-label="搜索设施"></div><div id="category-filters" class="chips"></div><div class="list-heading"><span id="list-count">60处固定设施</span><button id="only-open">只看已翻修</button></div><div id="facility-list"></div></section>
+ <section id="park-reviews" class="browser-section" hidden></section>
+ <footer class="sidebar-foot"><span class="save-dot"></span><span id="save-status">自动保存在当前浏览器</span></footer>
+</aside>
+<main class="scene-overlay"><div class="scene-caption ui"><span class="eyebrow">这座旧乐园，现在属于你</span><h1>让快乐，重新发生。</h1><p>从翻修第一座设施开始。</p></div><div class="view-tools ui"><button id="home" title="回到园区中心">⌂ <span>回到中心</span></button></div></main>
+<aside id="detail" class="detail ui" hidden></aside>
+<div class="bottom-hud ui"><div class="control-hints"><span><kbd>W A S D</kbd> 走动</span><span><kbd>↑ ← ↓ →</kbd> 转头</span><span><kbd>点击空白</kbd> 锁鼠</span><span><kbd>鼠标拖拽</kbd> 转向</span><span><kbd>Q E</kbd> 升降</span><span><kbd>Esc</kbd> 释放鼠标</span></div><output id="camera-location" class="camera-location" aria-label="视角位置">园区中心 · 朝北</output></div>
+<div id="locked-hint">WASD走动 · 方向键转头 · 准星瞄准设施后点击管理 · Esc释放鼠标</div>
+<div id="toast" role="status"></div>
+<dialog id="modal"><button class="modal-close" aria-label="关闭">×</button><div id="modal-content"></div></dialog>
+<script type="module" src="main.js?v=6"></script></body></html>
