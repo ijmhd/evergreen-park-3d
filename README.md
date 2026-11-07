@@ -1,8 +1,8 @@
 # 重返游乐园 · 3D经营模拟器
 
-[打开游戏](https://www.binzh.net/evergreen-park-3d/)
+[当前可玩的游戏](https://evergreen-park-3d-bz.bzhku.chatgpt.site/)
 
-GitHub Pages入口：https://ijmhd.github.io/evergreen-park-3d/ 。账号的个人主页已绑定自定义域名，因此项目沿用 www.binzh.net。
+GitHub Pages暂未启用，待确定使用的账号或组织后再发布。
 
 买下一座废弃游乐园，从园区中央开始，慢慢翻修60处固定设施。门票、特快通道、项目收费、排队容量和游客评价共同影响经营。各项目有多条升级路线，升级会改变3D外观。
 
